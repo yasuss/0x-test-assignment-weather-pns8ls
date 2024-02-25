@@ -71,6 +71,7 @@ body {
 
 .forecast-list {
   display: flex;
+  overflow-x: auto;
 }
 
 .forecast-item {
@@ -123,6 +124,8 @@ body {
   justify-content: space-between;
   align-items: center;
   font-size: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
 .daily-row:last-child {
