@@ -16,10 +16,10 @@ export default function App() {
     const daily = localStorage.getItem('daily');
 
     try {
-      const forecastData = JSON.parse(forecast);
+      const forecastData = forecast ? JSON.parse(forecast) : null;
       if (forecastData) setForecast(forecastData);
 
-      const dailyData = JSON.parse(daily);
+      const dailyData = daily ? JSON.parse(daily) : daily;
       if (dailyData) setDaily(dailyData);
     } finally {
     }
