@@ -28,18 +28,24 @@ export default function App() {
     }
 
     useEffect(() => {
-        // navigator.geolocation.getCurrentPosition((pos) => {
-        //     const { latitude: lat, longitude: lon } = pos.coords
-        //     setCurrent({
-        //         ...current,
-        //         location: { name: 'Current Location', lat, lon },
-        //     })
-        // })
+        navigator.geolocation.getCurrentPosition((pos) => {
+            const { latitude: lat, longitude: lon } = pos.coords
+            console.log('pos', pos)
+            setCurrent({
+                ...current,
+                location: { name: 'Current Location', lat, lon },
+            })
+        })
     }, [])
 
     useEffect(() => {
         async function getWeather() {
-            const apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${locationName}&days=10`
+            const locationKey =
+                current?.location?.lat && current?.location?.lon
+                    ? `${current.location.lat},${current.location.lon}`
+                    : locationName
+
+            const apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${locationKey}&days=10`
             const response = await fetch(apiUrl)
             const data = await response.json()
 
@@ -52,17 +58,18 @@ export default function App() {
         }
 
         getWeather()
-    }, [])
+    }, [current])
 
     return (
         <div>
             <div className="header">
                 <div className="location">{current.location.name}</div>
-                <div className="temp">{current?.current?.temp_c}</div>
+                <div className="temp">{current?.current?.temp_c}°</div>
                 <div className="conditions">
                     {current.current.condition.text}
                     <br />
-                    H:{daily[0].day.maxtemp_c} L:{daily[0].day.mintemp_c}
+                    H:{Math.floor(daily[0].day.maxtemp_c)}° L:
+                    {Math.floor(daily[0].day.mintemp_c)}°
                 </div>
             </div>
 
