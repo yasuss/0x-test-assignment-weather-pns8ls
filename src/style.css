@@ -20,8 +20,23 @@ body {
   justify-content: center;
   align-items: center;
 
-  background: linear-gradient(to bottom, #011e33, #625a72);
   color: white;
+}
+
+#root.morning {
+  background: linear-gradient(to bottom, #81C5E5, #DC927F);
+}
+
+#root.day {
+  background: linear-gradient(to bottom, #4982AD, #90BBD8);
+}
+
+#root.evening {
+  background: linear-gradient(to bottom, #6F6D8C, #BC615A80);
+}
+
+#root.night {
+  background: linear-gradient(to bottom, #011e33, #625a72);
 }
 
 #root > div {
