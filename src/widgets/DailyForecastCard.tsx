@@ -2,7 +2,7 @@ import React from 'react'
 import { getIcon } from '../shared/lib/getIcon'
 
 interface IDailyForecastCardProps {
-    daily: {
+    forecast: {
         date: string
         day: {
             maxtemp_c: number
@@ -30,13 +30,13 @@ const getDay = (date: string) => {
 }
 
 export const DailyForecastCard: React.FC<IDailyForecastCardProps> = (props) => {
-    const { daily } = props
+    const { forecast } = props
 
     return (
         <div className="daily">
             <div className="daily-title">10-DAY FORECAST</div>
             <div className="daily-list">
-                {daily.map(
+                {forecast.map(
                     ({
                         date,
                         day: {

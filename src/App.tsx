@@ -1,81 +1,96 @@
 import React, { useEffect, useState } from 'react'
 import './style.css'
 
-import { currentWeather, hourly, dailyForecast } from './data'
 import { HourlyForecastCard } from './widgets/HourlyForecastCard'
 import { DailyForecastCard } from './widgets/DailyForecastCard'
+import {
+    Location,
+    Current,
+    HourlyForecast,
+    DailyForecast,
+} from './shared/types/types'
 
 const apiKey = process.env.REACT_APP_ACCUWEATHER_API_KEY
 const locationName = 'Stockholm'
 
 export default function App() {
-    const [current, setCurrent] = useState(currentWeather)
-    const [forecast, setForecast] = useState(hourly)
-    const [daily, setDaily] = useState(dailyForecast)
+    const [current, setCurrent] = useState<Current | null>(null)
+    const [hourlyForecast, setHourlyForecast] = useState<
+        HourlyForecast[] | null
+    >(null)
+    const [dailyForecast, setDailyForecast] = useState<DailyForecast[] | null>(
+        null
+    )
+    const [location, setLocation] = useState<Location | null>(null)
 
-    if (!forecast.length || !daily.length) {
-        const forecast = localStorage.getItem('forecast')
-        const daily = localStorage.getItem('daily')
+    // if (!hourlyForecast.length || !dailyForecast.length) {
+    //     const forecast = localStorage.getItem('forecast')
+    //     const daily = localStorage.getItem('daily')
 
-        try {
-            const forecastData = forecast ? JSON.parse(forecast) : null
-            if (forecastData) setForecast(forecastData)
+    //     try {
+    //         const forecastData = forecast ? JSON.parse(forecast) : null
+    //         if (forecastData) setForecast(forecastData)
 
-            const dailyData = daily ? JSON.parse(daily) : daily
-            if (dailyData) setDaily(dailyData)
-        } finally {
-        }
-    }
+    //         const dailyData = daily ? JSON.parse(daily) : daily
+    //         if (dailyData) setDaily(dailyData)
+    //     } finally {
+    //     }
+    // }
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition((pos) => {
             const { latitude: lat, longitude: lon } = pos.coords
-            console.log('pos', pos)
-            setCurrent({
-                ...current,
-                location: { name: 'Current Location', lat, lon },
-            })
+            setLocation({ name: 'Current Location', lat, lon })
         })
     }, [])
 
     useEffect(() => {
         async function getWeather() {
             const locationKey =
-                current?.location?.lat && current?.location?.lon
-                    ? `${current.location.lat},${current.location.lon}`
+                location?.lat && location?.lon
+                    ? `${location.lat},${location.lon}`
                     : locationName
 
             const apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${locationKey}&days=10`
             const response = await fetch(apiUrl)
             const data = await response.json()
 
-            setCurrent({
-                current: data.current,
-                location: data.location,
-            })
-            setDaily(data.forecast.forecastday)
-            setForecast(data.forecast.forecastday[0].hour)
+            setCurrent(data.current)
+            localStorage.setItem('current', data.current)
+
+            setLocation(data.location)
+            localStorage.setItem('location', data.location)
+
+            setDailyForecast(data.forecast.forecastday)
+            localStorage.setItem('daily', data.forecast.forecastday)
+
+            setHourlyForecast(data.forecast.forecastday[0].hour)
+            localStorage.setItem('forecastday', data.forecastday)
         }
 
         getWeather()
-    }, [current])
+    }, [location?.lat, location?.lon])
 
     return (
         <div>
             <div className="header">
-                <div className="location">{current.location.name}</div>
-                <div className="temp">{current?.current?.temp_c}°</div>
+                <div className="location">{location?.name}</div>
+                <div className="temp">{current?.temp_c}°</div>
                 <div className="conditions">
-                    {current.current.condition.text}
+                    {current?.condition?.text}
                     <br />
-                    H:{Math.floor(daily[0].day.maxtemp_c)}° L:
-                    {Math.floor(daily[0].day.mintemp_c)}°
+                    H:{Math.floor(dailyForecast?.[0]?.day?.maxtemp_c)}° L:
+                    {Math.floor(dailyForecast?.[0]?.day?.mintemp_c)}°
                 </div>
             </div>
 
-            <HourlyForecastCard forecast={forecast} />
+            {hourlyForecast ? (
+                <HourlyForecastCard forecast={hourlyForecast} />
+            ) : null}
 
-            <DailyForecastCard daily={daily} />
+            {dailyForecast ? (
+                <DailyForecastCard forecast={dailyForecast} />
+            ) : null}
         </div>
     )
 }
