@@ -1,5 +1,7 @@
 import React from 'react'
-import { getIcon } from '../shared/lib/getIcon'
+import { getIcon } from '../../shared/lib/getIcon'
+import { getTime } from '../../shared/lib/getTime'
+import './HourlyForecastCard.styles.css'
 
 interface IHourlyForecastCardProps {
     forecast: {
@@ -9,23 +11,6 @@ interface IHourlyForecastCardProps {
             code: number
         }
     }[]
-}
-
-const getTime = (time: string) => {
-    const now = new Date()
-        .toLocaleString('en-US', {
-            hour: 'numeric',
-            hour12: true,
-        })
-        .replace(' ', '')
-    const currTime = new Date(time)
-        .toLocaleString('en-US', {
-            hour: 'numeric',
-            hour12: true,
-        })
-        .replace(' ', '')
-
-    return now === currTime ? 'Now' : currTime
 }
 
 export const HourlyForecastCard: React.FC<IHourlyForecastCardProps> = (
