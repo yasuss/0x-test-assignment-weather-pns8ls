@@ -79,8 +79,15 @@ export default function App() {
                 <div className="conditions">
                     {current?.condition?.text}
                     <br />
-                    H:{Math.floor(dailyForecast?.[0]?.day?.maxtemp_c)}° L:
-                    {Math.floor(dailyForecast?.[0]?.day?.mintemp_c)}°
+                    H:
+                    {Math.floor(
+                        dailyForecast ? dailyForecast[0]?.day?.maxtemp_c : 0
+                    )}
+                    ° L:
+                    {Math.floor(
+                        dailyForecast ? dailyForecast[0]?.day?.mintemp_c : 0
+                    )}
+                    °
                 </div>
             </div>
 
