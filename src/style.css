@@ -39,7 +39,7 @@ body {
     background: linear-gradient(to bottom, #011e33, #625a72);
 }
 
-#root > div {
+#root > .main {
     min-width: 320px;
     max-width: 460px;
     padding: 10px;

@@ -1,44 +1,25 @@
 .loader {
-    position: relative;
-    display: flex;
-    justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow: 32px 0 #fff, -32px 0 #fff;
+  position: relative;
+  animation: flash 0.5s ease-out infinite alternate;
+}
+
+@keyframes flash {
+  0% {
+    background-color: #FFF2;
+    box-shadow: 32px 0 #FFF2, -32px 0 #FFF;
   }
-  
-  .one {
-    position: absolute;
-    border-radius: 50%;
-    background: #FFFFFF;
-    opacity: .0;
-    animation: loading 1.5s .65s infinite;
-    height: 20px;
-    width: 20px;
+  50% {
+    background-color: #FFF;
+    box-shadow: 32px 0 #FFF2, -32px 0 #FFF2;
   }
-  
-  .two {
-    position: absolute;
-    border-radius: 50%;
-    background: #90BBD8;
-    opacity: .0;
-    animation: loading 1.5s infinite;
-    height: 20px;
-    width: 20px;
+  100% {
+    background-color: #FFF2;
+    box-shadow: 32px 0 #FFF, -32px 0 #FFF2;
   }
-  
-  
-  @keyframes loading {
-    0% {
-      opacity: .0;
-      transform: scale(.15);
-      box-shadow: 0 0 2px rgba(black, .1);
-    }
-    50% {
-      opacity: 1;
-      transform: scale(2);
-      box-shadow: 0 0 10px rgba(black, .1);
-    }
-    100% {
-      opacity: .0;
-      transform: scale(.15);
-      box-shadow: 0 0 2px rgba(black, .1);
-    }
-  }
+}
+      

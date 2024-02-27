@@ -10,6 +10,7 @@ import {
 import { getExtreme } from './shared/lib/getExtreme'
 import { Loader } from './shared/ui/loader/Loader'
 import { CurrentWeather } from './widgets/current-weather/CurrentWeather'
+import { getCurrentLocation } from './shared/lib/getCurrentLocation'
 import './style.css'
 
 const apiKey = process.env.REACT_APP_ACCUWEATHER_API_KEY
@@ -29,17 +30,14 @@ export default function App() {
     const { current, hourlyForecast, dailyForecast } = data
 
     useEffect(() => {
-        navigator.geolocation.getCurrentPosition((pos) => {
-            const { latitude: lat, longitude: lon } = pos.coords
-            setLocation({ name: 'Current Location', lat, lon })
-        })
-    }, [])
+        async function getData() {
+            const { data, error } = await getCurrentLocation()
+            if (data) setLocation(data)
+            const resultLocation = error ? location : data
 
-    useEffect(() => {
-        async function getWeather() {
             const locationKey =
-                location?.lat && location?.lon
-                    ? `${location.lat},${location.lon}`
+                resultLocation?.lat && resultLocation?.lon
+                    ? `${resultLocation.lat},${resultLocation.lon}`
                     : locationName
 
             const apiUrl = `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${locationKey}&days=10`
@@ -61,15 +59,17 @@ export default function App() {
             localStorage.setItem('location', response.location)
         }
 
-        getWeather().then(() => setLoading(false))
-    }, [location?.lat, location?.lon])
+        getData().finally(() => {
+            setLoading(false)
+        })
+    }, [])
 
     return (
         <>
             {isLoading ? (
                 <Loader />
             ) : (
-                <div>
+                <div className="main">
                     <CurrentWeather
                         locationName={location?.name}
                         temp={current?.temp_c ?? 0}
