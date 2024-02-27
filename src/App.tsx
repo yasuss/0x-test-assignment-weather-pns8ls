@@ -11,12 +11,14 @@ import { getExtreme } from './shared/lib/getExtreme'
 import { Loader } from './shared/ui/loader/Loader'
 import { CurrentWeather } from './widgets/current-weather/CurrentWeather'
 import { getCurrentLocation } from './shared/lib/getCurrentLocation'
+import { useOnlineStatus } from './shared/lib/useOnline'
 import './style.css'
 
 const apiKey = process.env.REACT_APP_ACCUWEATHER_API_KEY
 const locationName = 'Stockholm'
 
 export default function App() {
+    const isOnline = useOnlineStatus()
     const [isLoading, setLoading] = useState(true)
     const [location, setLocation] = useState<Location | null>(null)
     const [data, setData] = useState<{
@@ -56,12 +58,22 @@ export default function App() {
             localStorage.setItem('forecast', JSON.stringify(forecast))
 
             setLocation(response.location)
-            localStorage.setItem('location', response.location)
+            localStorage.setItem('location', JSON.stringify(response.location))
         }
 
-        getData().finally(() => {
+        if (isOnline) {
+            getData().finally(() => {
+                setLoading(false)
+            })
+        } else {
+            const forecast = localStorage.getItem('forecast')
+            if (forecast) setData(JSON.parse(forecast))
+
+            const location = localStorage.getItem('location')
+            if (location) setLocation(JSON.parse(location))
+
             setLoading(false)
-        })
+        }
     }, [])
 
     return (
