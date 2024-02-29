@@ -39,7 +39,7 @@ Improved code by adding features:
 
 ## Performance
 
-The lighthouse program was used to measure performance. The report is available in the repository [report](public/assets/lighthouse.pdf)
+The lighthouse program was used to measure performance. The report is available in the repository [report](public/assets/lighthouse.pdf) and short screen [report](public/assets/lighthouse_report.png)
 
 ## Additional Features
 
