@@ -20,22 +20,14 @@
 
 .forecast-list {
     display: flex;
+    gap: 10px;
 }
 
 .forecast-item {
     width: 45px;
     min-width: 45px;
     text-align: center;
-    margin: 0 10px;
     padding: 10px 0 0;
-}
-
-.forecast-item:first-child {
-    margin-left: 0;
-}
-
-.forecast-item:last-child {
-    margin-right: 0;
 }
 
 .forecast-item span {

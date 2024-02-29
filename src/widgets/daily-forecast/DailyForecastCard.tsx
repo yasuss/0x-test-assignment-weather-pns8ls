@@ -30,7 +30,7 @@ interface IDailyForecastCardProps {
                 }
             }
         }[]
-    }
+    } | null
 }
 
 export const DailyForecastCard: React.FC<IDailyForecastCardProps> = (props) => {
@@ -40,62 +40,63 @@ export const DailyForecastCard: React.FC<IDailyForecastCardProps> = (props) => {
         <div className="daily">
             <div className="daily-title">10-DAY FORECAST</div>
             <div className="daily-list">
-                {forecast.days.map(
-                    ({
-                        date,
-                        day: {
-                            mintemp_c: min,
-                            maxtemp_c: max,
-                            daily_will_it_rain,
-                            daily_chance_of_rain,
-                            condition,
-                        },
-                    }) => {
-                        const { left, right } = getRange(
-                            forecast.extreme,
-                            min,
-                            max
-                        )
+                {forecast &&
+                    forecast.days.map(
+                        ({
+                            date,
+                            day: {
+                                mintemp_c: min,
+                                maxtemp_c: max,
+                                daily_will_it_rain,
+                                daily_chance_of_rain,
+                                condition,
+                            },
+                        }) => {
+                            const { left, right } = getRange(
+                                forecast.extreme,
+                                min,
+                                max
+                            )
 
-                        return (
-                            <div className="daily-row">
-                                <div className="daily-time">
-                                    {getWeekDay(date)}
-                                </div>
+                            return (
+                                <div className="daily-row">
+                                    <div className="daily-time">
+                                        {getWeekDay(date)}
+                                    </div>
 
-                                <div className="daily-conditions">
-                                    {getIcon(condition.code)}
-                                    {daily_will_it_rain ? (
-                                        <span className="probability">
-                                            {daily_chance_of_rain}%
+                                    <div className="daily-conditions">
+                                        {getIcon(condition.code)}
+                                        {daily_will_it_rain ? (
+                                            <span className="probability">
+                                                {daily_chance_of_rain}%
+                                            </span>
+                                        ) : null}
+                                    </div>
+
+                                    <div className="daily-range">
+                                        <span className="daily-min">
+                                            {Math.floor(min)}°
                                         </span>
-                                    ) : null}
+                                        <span className="range">
+                                            <span
+                                                className="range-meter"
+                                                style={
+                                                    {
+                                                        '--left': `${left}%`,
+                                                        '--right': `${right}%`,
+                                                    } as MyCustomCSS
+                                                }
+                                            />
+                                            <span className="range-current" />
+                                        </span>
+                                        <span className="daily-max">
+                                            {Math.floor(max)}°
+                                        </span>
+                                    </div>
                                 </div>
-
-                                <div className="daily-range">
-                                    <span className="daily-min">
-                                        {Math.floor(min)}°
-                                    </span>
-                                    <span className="range">
-                                        <span
-                                            className="range-meter"
-                                            style={
-                                                {
-                                                    '--left': `${left}%`,
-                                                    '--right': `${right}%`,
-                                                } as MyCustomCSS
-                                            }
-                                        />
-                                        <span className="range-current" />
-                                    </span>
-                                    <span className="daily-max">
-                                        {Math.floor(max)}°
-                                    </span>
-                                </div>
-                            </div>
-                        )
-                    }
-                )}
+                            )
+                        }
+                    )}
             </div>
         </div>
     )

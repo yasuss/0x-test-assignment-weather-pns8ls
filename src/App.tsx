@@ -78,27 +78,21 @@ export default function App() {
 
     return (
         <>
-            {isLoading ? (
-                <Loader />
-            ) : (
-                <div className="main">
-                    <CurrentWeather
-                        locationName={location?.name}
-                        temp={current?.temp_c ?? 0}
-                        maxTemp={dailyForecast?.days[0]?.day?.maxtemp_c ?? 0}
-                        minTemp={dailyForecast?.days[0]?.day?.mintemp_c ?? 0}
-                        condition={current?.condition?.text}
-                    />
+            {isLoading ? <Loader /> : null}
 
-                    {hourlyForecast ? (
-                        <HourlyForecastCard forecast={hourlyForecast} />
-                    ) : null}
+            <div className="main">
+                <CurrentWeather
+                    locationName={location?.name}
+                    temp={current?.temp_c ?? 0}
+                    maxTemp={dailyForecast?.days[0]?.day?.maxtemp_c ?? 0}
+                    minTemp={dailyForecast?.days[0]?.day?.mintemp_c ?? 0}
+                    condition={current?.condition?.text}
+                />
 
-                    {dailyForecast ? (
-                        <DailyForecastCard forecast={dailyForecast} />
-                    ) : null}
-                </div>
-            )}
+                <HourlyForecastCard forecast={hourlyForecast} />
+
+                <DailyForecastCard forecast={dailyForecast} />
+            </div>
         </>
     )
 }

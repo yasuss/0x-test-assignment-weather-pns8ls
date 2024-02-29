@@ -8,43 +8,40 @@ Please, make sure to **document** your solutions and reasons behind taken techni
 
 Prepare and send us your solution as a **GitHub repository**. Use the existing code as the initial project state and create a **PR with all the changes** you're going to make.
 
-## New Features
+### Architectural solutions
 
-Extend the functionality of the app with new features:
+Architectural solutions which I decided to make:
 
-1. Replace the dummy app data with **real weather data** by using the [AccuWeather API](https://developer.accuweather.com/packages) or other weather API providers of your choice. You can use any library for network requests, caching data, and managing data flow or app life cycle.
-2. Update the background of the app to **show different gradients** based on the user's **local time**. You will find all gradient variations in [this Figma file](https://www.figma.com/file/9ZAG6Hk7Csm58IeStWn5GZ/0%2BX-Test-Assignment%3A-Weather-App).
-3. Create a **“Loading” screen** for the app with any loading indicator in it.
+- Splitted whole main screen into `widgets` - current weather, hourly forecast and daily forecast. So the code becomes more readable and reusable
+- Moved helpers into `shared/lib` directory to make it more reusable
+- Splitted main css file into small fragments and place thiese fragments near to components. So we don't have 1 big stylesheet with all styles
 
-## Bug Fixes
+### Features
 
-Fix the bugs in the source code.
+- Integrated [Weather api](https://www.weatherapi.com/)
+- Updated the background based on the user's local time by getting current hour and adding className in main style file depends on the hour
+- Created loader and used it on main screen
 
-- The “Hourly Forecast” section should have a **scrollable list** of weather conditions for each hour until the next day.
-- The “10-Day Forecast” section should have columns that **form a straight line** as [in the design](https://www.figma.com/file/9ZAG6Hk7Csm58IeStWn5GZ/0%2BX-Test-Assignment%3A-Weather-App).
-- Each row of the “10-Day Forecast” should contain a temperature range with a gradient based on the lowest and highest temperature **for the whole 10-day period**. The temperatures of the current day (min, max, avg) should be placed on that range.
+### Bug Fixes
 
-## Best Practices
+- Add style param `overflow-x: auto` to “Hourly Forecast” section to make it scrollable
+- Fix columns in “10-Day Forecast” section by using `grid` and `grid-template-columns: 1fr 1fr 1fr;` to fix position for columns
+- Fix gradient rate in “10-Day Forecast” section. For calculating this rate, we calculated min and max tempreture in all days in function `getExtreme`, found the position for min and max tempreture for each day in function `getRange`, set these values as css variables (`--left` and `--right`) and use these css variables to place the line 
 
-Improve the quality of the existing source code by fixing poor solutions and implementing better practices. Pay attention to **any issues you find**, such as:
+### Best Practices
 
-- Accessibility problems
-- Brittle components
-- Unoptimal styling
-- Low performance
-- High coupling
-- Poor architecture
-- Bad code metrics, etc
+Improved code by adding features:
+
+- Made accessible svg by adding `title` and `desc` to make it readable for screen reader
+- Splitted the code into chunkes for better scaling 
+- Changed architecture
+- Optimized styles. For example: in forecast classname use `gap` instead of `margin` for each elemnent; use just `.main` selector insted of nested selector `#root > .main`
 
 ## Performance
 
-Ensure that the app is performant by **measuring** web vitals or other relevant characteristics. Add those to the documentation file.
+The lighthouse program was used to measure performance. The report is available in the repository []
 
 ## Additional Features
 
-The following features are **optional, so you can skip them** if you don't have enough time.
-
-- Adapt the UI for **wider screens** (tablets and desktops), make sure there aren't any rendering issues.
 - Improve the current location detection feature by showing the current **city name** instead of “Current Location” when the app gets access to the user's location.
-- Handle any network errors **gracefully** to prevent “data flashing” on the screen.
-- Make the app “installable” and **work offline**. You might need to save the latest data locally on the device to show it when offline.
+- Make the app “installable” and **work offline** by adding data in user's localStorage
